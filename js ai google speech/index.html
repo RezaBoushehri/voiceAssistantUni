@@ -1,0 +1,22 @@
+<textarea dir="auto" class="form-control has-validation" list="browsers" required placeholder="comment" id="commentTextarea" name="commentTextarea" onkeyup="countChar(this)" style="height: 123px; padding-right: 60px;"></textarea>
+<label for="commentTextarea">Comment</label>
+<div style="position: absolute; right: 10px; top: 20%; transform: translateY(-50%);">
+  <button type="button" id="startBtn" class="btn btn-primary" onclick="startListening()" style="height: 40px; width: 40px; border-radius: 50%;"><i class="bi bi-mic-fill"></i></button>
+  <button type="button" id="stopBtn" class="btn btn-warningi" hidden onclick="stopListening()" style="height: 40px; width: 40px; border-radius: 10px; "><i class="bi bi-mic-mute-fill"></i></button>
+</div>
+<span id="charNum" class="charNum">800</span>
+<script>
+  function countChar(val) {
+    var len = val.value.length;
+    if (len >= 800) {
+      val.value = val.value.substring(0, 800);
+    } else {
+      $('#charNum').text(800 - len);
+    }
+  };
+</script>
+
+<div id="response">
+</div>
+<div id="merlin-response"></div>
+<script src="merlinCom.js"></script>
