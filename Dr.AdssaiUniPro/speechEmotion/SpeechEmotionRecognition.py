@@ -56,13 +56,13 @@ def record_audio(duration=5, sr=16000):
     return audio.flatten(), sr
 
 # Path to dataset (update to your dataset path)
-data_path = "./Dr.AdssaiUniPro/speechEmotion/audio_dataset/PersianESD_Sample_1/PersianESD_Sample/Audio"
+data_path = "./Dr.AdssaiUniPro/speechEmotion/audio_dataset/ownAudio"
 
 # Load data
 features, labels = load_data(data_path)
 
 # Train-test split
-X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.5, random_state=42)
 
 # Train an SVM classifier
 svm = SVC(kernel='linear')
