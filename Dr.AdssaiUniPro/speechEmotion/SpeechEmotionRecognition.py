@@ -44,9 +44,9 @@ def load_data(data_path):
     return np.array(features), np.array(labels)
 
 # Recording Function with Timer
-def record_audio(duration=5, sr=16000):
+def record_audio(duration=3, sr=16000):
     print("Recording will start in:")
-    for i in range(5, 0, -1):
+    for i in range(3, 0, -1):
         print(f"{i}...")
         time.sleep(1)
     print("Recording...")
