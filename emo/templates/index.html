@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audio Recorder</title>
+</head>
+<body>
+  <h1>Audio Recorder</h1>
+  <button id="record">Start Recording</button>
+  <button id="stop" disabled>Stop Recording</button>
+  <script>
+    let mediaRecorder;
+    let audioChunks = [];
+
+    const recordButton = document.getElementById('record');
+    const stopButton = document.getElementById('stop');
+
+    recordButton.addEventListener('click', async () => {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+
+      mediaRecorder.start();
+      recordButton.disabled = true;
+      stopButton.disabled = false;
+
+      mediaRecorder.ondataavailable = event => {
+        audioChunks.push(event.data);
+      };
+    });
+
+    stopButton.addEventListener('click', () => {
+      mediaRecorder.stop();
+      stopButton.disabled = true;
+
+      mediaRecorder.onstop = async () => {
+        const blob = new Blob(audioChunks, { type: 'audio/webm' });
+        const base64Audio = await blobToBase64(blob);
+        audioChunks = [];
+
+        // Send base64 audio to the Flask API
+        fetch('http://127.0.0.1:80/process-audio', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ audio: base64Audio }),
+        })
+          .then(response => response.json())
+          .then(data => console.log('Response from server:', data))
+          .catch(error => console.error('Error:', error));
+
+        recordButton.disabled = false;
+      };
+    });
+
+    function blobToBase64(blob) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    }
+  </script>
+</body>
+</html>
