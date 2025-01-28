@@ -48,7 +48,7 @@ def recognize_speech():
         return text
     except sr.UnknownValueError:
         print("Sphinx could not understand the audio")
-        return None
+        return None                                   
     except sr.RequestError as e:
         print(f"Sphinx error; {e}")
         return None
